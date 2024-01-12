@@ -1,0 +1,117 @@
+$h2-font-size: 16px;
+$ul-padding-left: 1.5em;
+$li-margin-bottom: 1.5em;
+$li-not-last-child-margin: 1.5em 0;
+$b-margin-right: 3px;
+$demo-app-font-size: 14px;
+$demo-app-sidebar-card-max-height: 40ch;
+$demo-app-sidebar-card-background: #e4edef;
+$toggle-button-background: #3498db;
+$toggle-button-active-background: #2c3e50;
+$overlay-background: rgba(0, 0, 0, 0.3);
+$popup-background: #fff;
+$popup-border-radius: 5px;
+$popup-width: 30%;
+
+body{
+  padding: 0.5rem !important;
+}
+
+h2 {
+  margin: 0;
+  font-size: $h2-font-size;
+}
+
+ul {
+  margin: 0;
+  padding: 0 $ul-padding-left;
+  list-style-type: square;
+}
+
+li:not(:last-child) {
+  margin: $li-not-last-child-margin;
+  padding: 0;
+}
+
+b {
+  margin-right: $b-margin-right;
+}
+
+.demo-app {
+  display: flex;
+  min-height: 100%;
+  font-family: Arial, Helvetica Neue, Helvetica, sans-serif;
+  font-size: $demo-app-font-size;
+}
+
+.demo-app-sidebar-container {
+  max-width: 300px;
+  line-height: 1.5;
+  display: flex;
+  flex-direction: column;
+  gap: .8rem;
+}
+
+.demo-app-sidebar-card {
+  padding: 2em;
+  background: $demo-app-sidebar-card-background;
+  border-radius: 6px;
+
+  &.events-list {
+    max-height: $demo-app-sidebar-card-max-height;
+    overflow: auto;
+  }
+}
+
+.demo-app-main {
+  flex-grow: 1;
+  padding: 1.5em;
+  padding-top: 0;
+}
+
+.fc {
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.toggle-buttons {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 10px;
+}
+
+.demo-app-sidebar-section {
+  margin-left: 10px;
+}
+
+.toggle-button {
+  padding: 8px 12px;
+  cursor: pointer;
+  background-color: $toggle-button-background;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+
+  &.active {
+    background-color: $toggle-button-active-background;
+  }
+}
+
+.demo-toggle-button-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-bottom: 1rem;
+}
+
+:host {
+  ::ng-deep {
+    .full-cal {
+      a {
+        text-decoration: none !important;
+        color: inherit !important;
+      }
+    }
+  }
+}
