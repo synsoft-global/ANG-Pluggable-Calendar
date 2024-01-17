@@ -4,11 +4,11 @@ import interactionPlugin from '@fullcalendar/interaction';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import listPlugin from '@fullcalendar/list';
-import { INITIAL_EVENTS, createEventId } from './event-utils';
+import { createEventId } from './event-utils';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
-import { ConfirmationModalComponent, AddEventModalComponent } from './modules/modals';  // Update the path accordingly
-
-
+import { ConfirmationModalComponent, AddEventModalComponent } from './modals';  // Update the path accordingly
+import { DataService } from './services';
+import { EventInput } from '@fullcalendar/core';
 
 @Component({
   selector: 'app-root',
@@ -18,6 +18,7 @@ import { ConfirmationModalComponent, AddEventModalComponent } from './modules/mo
 export class AppComponent {
   @ViewChild('template') templateRef: TemplateRef<undefined> | undefined;
   @ViewChild('formtemplate') formtemplateRef: TemplateRef<undefined> | undefined;
+  initialEvents: EventInput[] = []
   title = 'calendar-angular-project';
   modalRef?: BsModalRef;
   formmodalRef?: BsModalRef;
@@ -37,7 +38,7 @@ export class AppComponent {
       right: 'dayGridMonth,timeGridWeek,timeGridDay,listWeek'
     },
     initialView: 'dayGridMonth',
-    initialEvents: INITIAL_EVENTS,
+    initialEvents: this.dataService.getData(),
     weekends: true,
     editable: true,
     selectable: true,
@@ -53,7 +54,11 @@ export class AppComponent {
     */
   });
   currentEvents = signal<EventApi[]>([]);
-  constructor(private changeDetector: ChangeDetectorRef, private modalService: BsModalService) { }
+  constructor(private changeDetector: ChangeDetectorRef, private modalService: BsModalService, private dataService: DataService) { }
+
+  ngOnInIt(): void {
+    this.initialEvents = this.dataService.getData();
+  }
 
   handleCalendarToggle() {
     this.calendarVisible.update((bool) => !bool);
@@ -69,11 +74,11 @@ export class AppComponent {
     const calendarApi = selectInfo.view.calendar;
     calendarApi.unselect();
     this.formmodalRef = this.modalService.show(AddEventModalComponent, {});
-    this.formmodalRef.content.onConfirm.subscribe((confirmation: any) => {
-      if (confirmation) {
+    this.formmodalRef.content.onConfirm.subscribe((resp: { status: string, formTitle: string }) => {
+      if (resp) {
         selectInfo.view.calendar.addEvent({
           id: createEventId(),
-          title: confirmation.formTitle,
+          title: resp.formTitle,
           start: selectInfo.startStr,
           end: selectInfo.endStr,
           allDay: selectInfo.allDay
@@ -91,8 +96,8 @@ export class AppComponent {
       }
     });
 
-    this.modalRef.content.onConfirm.subscribe((confirmation: boolean) => {
-      if (confirmation) {
+    this.modalRef.content.onConfirm.subscribe((resp: boolean) => {
+      if (resp) {
         clickInfo.event.remove();
       }
     });
